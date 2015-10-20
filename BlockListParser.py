@@ -5,19 +5,23 @@ from RegexParser import Parser
 class BlockListParser:
     """Creates maps of shortcut hashes with regex of the urls"""
 
-    def __init__(self, shortcut_sizes, regex_lines, print_maps = False, support_hash = False):
+    def __init__(self, regex_lines, shortcut_sizes=None, print_maps=False, support_hash=False):
         """Initializes the shortcut to Parser map"""
         self.fast_hashes = []
         self.print_maps = print_maps
         self.support_hash = support_hash
-        for shortcut_size in shortcut_sizes:
+        if shortcut_sizes:
+            self.shortcut_sizes = shortcut_sizes
+        else:
+            self.shortcut_sizes = self._determine_shortcut_sizes(len(regex_lines))
+        for shortcut_size in self.shortcut_sizes:
             self.fast_hashes.append(FastHash(shortcut_size))
-        self.shortcut_sizes = shortcut_sizes
         all_shortcut_url_maps, remaining_lines = self._get_all_shortcut_url_maps(regex_lines)
         self.all_shortcut_parser_maps = self._get_all_shortcut_parser_maps(all_shortcut_url_maps)
         self.remaining_regex = self._convert_to_regex(remaining_lines)
 
     def should_block(self, url, options=None):
+        """Check if url is in the patterns"""
         if self.support_hash:
             return self._should_block_with_hash()
         blacklisted = False
@@ -47,6 +51,10 @@ class BlockListParser:
             elif state == -1:
                 blacklisted = True
         return blacklisted
+
+    def _determine_shortcut_sizes(self, num_regex_lines):
+        """Empirically the following returns the best value"""
+        return [14, 10, 6, 4]
 
     def _convert_to_regex(self, lines):
         return Parser(lines)

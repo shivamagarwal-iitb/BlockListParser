@@ -4,10 +4,9 @@ import time, sys
 privacy_list = "../../easyprivacy.txt"
 ad_list = "../../easylist.txt"
 
-sizes = map(int, sys.argv[1].split(","))
 with open(privacy_list) as f:
     regex_lines = f.readlines()
-creator = BlockListParser(sizes, regex_lines, True)
+creator = BlockListParser(regex_lines)
 
 with open('trialURLs') as f:
     urls = f.readlines()
