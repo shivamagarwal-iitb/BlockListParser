@@ -1,14 +1,14 @@
 from ShortcutMapCreator import ShortcutMapCreator
 import time, sys
 
-privacy_list = "../../../easyprivacy.txt"
-ad_list = "../../../easylist.txt"
+privacy_list = "../../easyprivacy.txt"
+ad_list = "../../easylist.txt"
 
 sizes = map(int, sys.argv[1].split(","))
 creator = ShortcutMapCreator(sizes, privacy_list)
 #creator.should_block("http://affiliates.swappernet.com")
 
-with open('../trialURLs') as f:
+with open('trialURLs') as f:
     urls = f.readlines()
 
 options = {'script': False, 'third-party': True, 'domain': 'www.foo.bar.mystartpage.com'}

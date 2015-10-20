@@ -155,7 +155,7 @@ class SingleRuleParser:
         rule = re.sub("(\|)[^$]", r"\|", rule)
         return rule
 
-class BlockListParser:
+class Parser:
 
     def __init__(self, rules, rule_cls=SingleRuleParser):
 

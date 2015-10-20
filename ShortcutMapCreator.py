@@ -1,14 +1,15 @@
-import re, pprint
+import re
 from FastHash import FastHash
-from BlockListParser import BlockListParser
+from Parser import Parser
 
 class ShortcutMapCreator:
     """Creates maps of shortcut hashes with regex of the urls"""
 
-    def __init__(self, shortcut_sizes, block_list, support_hash = False):
+    def __init__(self, shortcut_sizes, block_list, print_maps = True, support_hash = False):
         with open(block_list) as f:
             lines = f.readlines()
         self.fast_hashes = []
+        self.print_maps = print_maps
         self.support_hash = support_hash
         for shortcut_size in shortcut_sizes:
             self.fast_hashes.append(FastHash(shortcut_size))
@@ -49,7 +50,7 @@ class ShortcutMapCreator:
         return blacklisted
 
     def _convert_to_regex(self, lines):
-        return BlockListParser(lines)
+        return Parser(lines)
 
     def _should_block_with_hash(self, url, options):
         blacklisted = False
@@ -95,7 +96,15 @@ class ShortcutMapCreator:
                 num_shortcuts[num] = 1
                 num_shortcuts_stored[num] = [shortcut]
         print num_shortcuts
-        #pprint.pprint((num_shortcuts_stored))
+
+    def _print_statistics_of_map(self, shortcut_size, total_rules, total_comments,
+                                 total_shortcuts, total_secondary_lines, shortcut_map):
+        print "**********Shortcut size is %d**********" % shortcut_size
+        print "Number of rules = ", total_rules, ", comments = ", total_comments
+        print "Shortcuts found for ", total_shortcuts, " rules"
+        print "Shortcuts not found for ", total_secondary_lines, " rules"
+        print "Number map is"
+        self._print_num_map(shortcut_map)
 
     def _get_shortcut_map(self, pat, lines, shortcut_size):
         shortcut_map = {}
@@ -132,12 +141,9 @@ class ShortcutMapCreator:
                     break
             if flag == 0:
                 shortcut_map[min_s].append(line)
-        print "**********Shortcut size is %d**********" % shortcut_size
-        print "Number of rules = ", total_rules, ", comments = ", total_comments
-        print "Shortcuts found for ", total_shortcuts, " rules"
-        print "Shortcuts not found for ", len(secondary_lines), " rules"
-        print "Number map is"
-        self._print_num_map(shortcut_map)
+        if self.print_maps:
+            self._print_statistics_of_map(shortcut_size, total_rules, total_comments,
+                                          total_shortcuts, len(secondary_lines), shortcut_map)
         return shortcut_map, secondary_lines
 
     def _get_all_shortcut_maps(self, lines):
