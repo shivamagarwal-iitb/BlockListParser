@@ -155,6 +155,9 @@ class SingleRuleParser:
         rule = re.sub("(\|)[^$]", r"\|", rule)
         return rule
 
+    def get_rule(self):
+        return self.raw_rule_text
+
 class Parser:
 
     def __init__(self, rules, rule_cls=SingleRuleParser):
@@ -182,7 +185,6 @@ class Parser:
         self.blacklist_require_domain, self.whitelist_require_domain = self._split_bw_domain(domain_required_rules)
 
     def check(self, url, options=None):
-        # TODO: group rules with similar options and match them in bigger steps
         options = options or {}
         if self.is_whitelisted(url, options):
             return 1
@@ -225,6 +227,21 @@ class Parser:
                     result[domain].append(rule)
         return dict(result)
 
+    def print_rules(self):
+        for rule in self.blacklist:
+            print "1:", rule.get_rule()
+        for rule in self.whitelist:
+            print "2:",rule.get_rule()
+        for domain in self.blacklist_require_domain:
+            for rule in self.blacklist_require_domain[domain]:
+                print "3:", domain, ":", rule.get_rule()
+        for domain in self.whitelist_require_domain:
+            for rule in self.whitelist_require_domain[domain]:
+                print "4:", domain, ":", rule.get_rule()
+        for rule in self.blacklist_with_options:
+            print "5:", rule.get_rule()
+        for rule in self.whitelist_with_options:
+            print "6:", rule.get_rule()
 
 
 def _domain_variants(domain):
