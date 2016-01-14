@@ -52,6 +52,50 @@ class BlockListParser:
                 blacklisted = True
         return blacklisted
 
+    def should_block_and_print(self, url, options=None):
+        """Check if url is in the patterns"""
+        if self.support_hash:
+            return self._should_block_with_hash()
+        blacklisted = False
+        for k in xrange(len(self.shortcut_sizes)):
+            shortcut_size = self.shortcut_sizes[k]
+            regex_map = self.all_shortcut_parser_maps[k]
+            for i in xrange(len(url) - shortcut_size + 1):
+                cur_sub = url[i:i+shortcut_size]
+                if cur_sub in regex_map:
+                    parser = regex_map[cur_sub]
+                    if blacklisted:
+                        if parser.is_whitelisted(url, options):
+                            print "Whitelisted by---------"
+                            parser.print_rules()
+                            return False
+                    else:
+                        state = parser.check(url, options)
+                        if state == 1:
+                            print "Whitelisted by---------"
+                            parser.print_rules()
+                            return False
+                        elif state == -1:
+                            print "Blacklisted by---------"
+                            parser.print_rules()
+                            blacklisted = True
+        if blacklisted:
+            if self.remaining_regex.is_whitelisted(url, options):
+                print "Whitelisted by---------"
+                parser.print_rules()
+                return False
+        else:
+            state = self.remaining_regex.check(url, options)
+            if state == 1:
+                print "Whitelisted by---------"
+                parser.print_rules()
+                return False
+            elif state == -1:
+                print "Blacklisted by---------"
+                parser.print_rules()
+                blacklisted = True
+        return blacklisted
+
     def _determine_shortcut_sizes(self, num_regex_lines):
         """Empirically the following returns the best value"""
         return [14, 10, 6, 4]
