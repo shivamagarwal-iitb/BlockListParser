@@ -52,7 +52,8 @@ def get_option_dict(url, top_url, header_str):
 privacy_list = "../../easyprivacy.txt"
 ad_list = "../../easylist.txt"
 db_path = "../../databases/2015-11_5k_ID_detection_1/2015-11_5k_ID_detection_1_census_crawl.sqlite"
-table_name = "http_response_cookies_test_small"
+table_name = "http_response_cookies_test"
+samll_table_name = "http_response_cookies_test_small"
 
 with open(ad_list) as f:
     regex_lines = f.readlines()
