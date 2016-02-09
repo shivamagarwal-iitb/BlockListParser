@@ -49,15 +49,18 @@ def get_option_dict(url, top_url, header_str):
     options["domain"] = top_hostname
     return options
 
-privacy_list = "../../easyprivacy.txt"
-ad_list = "../../easylist.txt"
+privacy_list = "../../blacklists/easyprivacy.txt"
+ad_list = "../../blacklists/easylist.txt"
+ad_list5 = "../../blacklists/easylist_5.txt"
+ad_list6 = "../../blacklists/easylist_6.txt"
+use_list = ad_list5
+
 db_path = "../../databases/2015-11_5k_ID_detection_1/2015-11_5k_ID_detection_1_census_crawl.sqlite"
 table_name = "http_response_cookies_test"
-samll_table_name = "http_response_cookies_test_small"
+small_table_name = "http_response_cookies_test_small"
+use_table_name = small_table_name
 
-with open(ad_list) as f:
-    regex_lines = f.readlines()
-creator = BlockListParser(regex_lines)
+creator = BlockListParser(use_list)
 
 con = sqlite3.connect(db_path)
 cur = con.cursor()
@@ -71,7 +74,7 @@ id_list = ids.split()
 for id in id_list:
     id = int(id)
     print "\n*****ID:", id
-    cur.execute("SELECT url, top_url, headers FROM %s WHERE id = %d" % (table_name, id))
+    cur.execute("SELECT url, top_url, headers FROM %s WHERE id = %d" % (use_table_name, id))
     for url, top_url, header in fetchiter(cur):
         print "*****URL:", url
         print "*****TOP_URL:", top_url
