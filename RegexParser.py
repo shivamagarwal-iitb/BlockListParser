@@ -57,6 +57,9 @@ class SingleRuleParser:
             # We should split the rule into URL and HTML parts,
             # convert URL part to a regex and parse the HTML part.
             self.regex = ''
+        elif not rule_text:
+            self.is_comment = True
+            self.regex = ''
         else:
             self.regex = self.rule_to_regex(rule_text)
 
