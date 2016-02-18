@@ -109,6 +109,15 @@ class SingleRuleParser:
 
         return True
 
+    def get_html_rule(self):
+        return self.is_html_rule
+
+    def get_comment(self):
+        return self.is_comment
+
+    def get_keys(self):
+        return self._options_keys
+
     @classmethod
     def _split_options(cls, options_text):
         return cls.OPTIONS_SPLIT_RE.split(options_text)
