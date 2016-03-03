@@ -5,10 +5,13 @@ from RegexParser import Parser
 class BlockListParser:
     """Creates maps of shortcut hashes with regex of the urls"""
 
-    def __init__(self, regex_file, shortcut_sizes=None, print_maps=False, support_hash=False):
+    def __init__(self, regex_file=None, regexes=None, shortcut_sizes=None, print_maps=False, support_hash=False):
         """Initializes the shortcut to Parser map"""
-        with open(regex_file) as f:
-            regex_lines = f.readlines()
+        if regex_file is None:
+            regex_lines = regexes
+        else:
+            with open(regex_file) as f:
+                regex_lines = f.readlines()
         self.fast_hashes = []
         self.print_maps = print_maps
         self.support_hash = support_hash

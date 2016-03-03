@@ -53,7 +53,7 @@ privacy_list = "../../blacklists/easyprivacy.txt"
 ad_list = "../../blacklists/easylist.txt"
 ad_list5 = "../../blacklists/easylist_5.txt"
 ad_list6 = "../../blacklists/easylist_6.txt"
-use_list = ad_list5
+use_list = privacy_list
 
 db_path = "../../databases/2015-11_5k_ID_detection_1/2015-11_5k_ID_detection_1_census_crawl.sqlite"
 table_name = "http_response_cookies_test"
