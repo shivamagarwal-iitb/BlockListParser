@@ -12,6 +12,7 @@ class BlockListParser:
         else:
             with open(regex_file) as f:
                 regex_lines = f.readlines()
+        self.regex_lines = regex_lines
         self.fast_hashes = []
         self.print_maps = print_maps
         self.support_hash = support_hash
@@ -100,6 +101,34 @@ class BlockListParser:
                 parser.print_rules()
                 blacklisted = True
         return blacklisted
+
+    def should_block_with_items(self, url, options=None):
+        blacklisting_items = []
+        blacklisted = False
+        for k in xrange(len(self.shortcut_sizes)):
+            shortcut_size = self.shortcut_sizes[k]
+            regex_map = self.all_shortcut_parser_maps[k]
+            for i in xrange(len(url) - shortcut_size + 1):
+                cur_sub = url[i:i+shortcut_size]
+                if cur_sub in regex_map:
+                    parser = regex_map[cur_sub]
+                    state, items = parser.check_with_items(url, options)
+                    if state == 1:
+                        return False, []
+                    elif state == -1:
+                        blacklisting_items += items
+                        blacklisted = True
+        state, items = self.remaining_regex.check_with_items(url, options)
+        if state == 1:
+            return False, []
+        elif state == -1:
+            blacklisting_items += items
+            blacklisted = True
+        return blacklisted, blacklisting_items
+
+
+    def get_all_items(self):
+        return self.regex_lines
 
     def _determine_shortcut_sizes(self, num_regex_lines):
         """Empirically the following returns the best value"""

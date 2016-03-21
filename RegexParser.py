@@ -204,11 +204,23 @@ class Parser:
             return -1
         return 0
 
+    def check_with_items(self, url, options=None):
+        options = options or {}
+        if self.is_whitelisted(url, options):
+            return 1, []
+        blacklisted, items = self.is_blacklisted_with_items(url, options)
+        if blacklisted:
+            return -1, items
+        return 0, []
+
     def is_whitelisted(self, url, options=None):
         return self._matches(url, options, self.whitelist, self.whitelist_require_domain, self.whitelist_with_options)
 
     def is_blacklisted(self, url, options=None):
         return self._matches(url, options, self.blacklist, self.blacklist_require_domain, self.blacklist_with_options)
+
+    def is_blacklisted_with_items(self, url, options=None):
+        return self._matches_with_items(url, options, self.blacklist, self.blacklist_require_domain, self.blacklist_with_options)
 
     def _matches(self, url, options, general_rules, domain_required_rules, rules_with_options):
         rules = general_rules + rules_with_options
@@ -219,6 +231,22 @@ class Parser:
                     rules.extend(domain_required_rules[domain])
         rules = [rule for rule in rules if rule.matching_supported(options)]
         return any(rule.match_url(url, options) for rule in rules)
+
+    def _matches_with_items(self, url, options, general_rules, domain_required_rules, rules_with_options):
+        rules = general_rules + rules_with_options
+        if options and 'domain' in options and domain_required_rules:
+            src_domain = options['domain']
+            for domain in _domain_variants(src_domain):
+                if domain in domain_required_rules:
+                    rules.extend(domain_required_rules[domain])
+        rules = [rule for rule in rules if rule.matching_supported(options)]
+        matches = False
+        items = []
+        for rule in rules:
+            if rule.match_url(url, options):
+                matches = True
+                items.append(rule.get_rule())
+        return matches, items
 
     @classmethod
     def _split_bw(cls, rules):

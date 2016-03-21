@@ -56,8 +56,8 @@ ad_list6 = "../../blacklists/easylist_6.txt"
 use_list = privacy_list
 
 db_path = "../../databases/2015-11_5k_ID_detection_1/2015-11_5k_ID_detection_1_census_crawl.sqlite"
-table_name = "http_response_cookies_test"
-small_table_name = "http_response_cookies_test_small"
+table_name = "http_response_cookies_test_5k"
+small_table_name = "http_response_cookies_test_small_5k"
 use_table_name = small_table_name
 
 creator = BlockListParser(use_list)
