@@ -126,9 +126,11 @@ class BlockListParser:
             blacklisted = True
         return blacklisted, blacklisting_items
 
-
-    def get_all_items(self):
-        return self.regex_lines
+    @staticmethod
+    def get_all_items(regex_file):
+        with open(regex_file) as f:
+            regex_lines = f.readlines()
+        return regex_lines
 
     def _determine_shortcut_sizes(self, num_regex_lines):
         """Empirically the following returns the best value"""
