@@ -26,6 +26,13 @@ class BlockListParser:
         self.all_shortcut_parser_maps = self._get_all_shortcut_parser_maps(all_shortcut_url_maps)
         self.remaining_regex = self._convert_to_regex(remaining_lines)
 
+    def get_num_classes(self):
+        # always supports only binary classification, blocked or not blocked
+        return 2
+
+    def get_classes_description(self):
+        return ['Not Blocked', 'Blocked']
+
     def should_block(self, url, options=None):
         """Check if url is in the patterns"""
         if self.support_hash:
@@ -125,6 +132,19 @@ class BlockListParser:
             blacklisting_items += items
             blacklisted = True
         return blacklisted, blacklisting_items
+
+    def get_block_class(self, url, options=None):
+        if self.should_block(url, options):
+            return 1
+        else:
+            return 0
+
+    def get_block_class_with_items(self, url, options=None):
+        block, items = self.should_block_with_items(url, options)
+        if block:
+            return 1, items
+        else:
+            return 0, items
 
     @staticmethod
     def get_all_items(regex_file):
