@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 import re
 from FastHash import FastHash
 from RegexParser import Parser
