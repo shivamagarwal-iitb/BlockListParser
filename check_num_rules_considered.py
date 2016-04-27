@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 from RegexParser import SingleRuleParser
 
 options = {}
@@ -26,7 +28,7 @@ with open('../../blacklists/easylist.txt') as f:
             count_html += 1
         total += 1
 
-print "Considered rules:", count_correct, count_correct*100.0/total, "%"
-print "Comments:", count_comment, count_comment*100.0/total, "%"
-print "HTML rules:", count_html, count_html*100.0/total, "%"
-print "Rest remaining:", total - (count_correct + count_comment + count_html), (total - (count_correct + count_comment + count_html))*100.0/total, "%"
+print("Considered rules:", count_correct, count_correct*100.0/total, "%")
+print("Comments:", count_comment, count_comment*100.0/total, "%")
+print("HTML rules:", count_html, count_html*100.0/total, "%")
+print("Rest remaining:", total - (count_correct + count_comment + count_html), (total - (count_correct + count_comment + count_html))*100.0/total, "%")

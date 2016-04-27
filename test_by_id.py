@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 from BlockListParser import BlockListParser
 import time, sys
 
@@ -73,12 +75,12 @@ ids = sys.argv[1]
 id_list = ids.split()
 for id in id_list:
     id = int(id)
-    print "\n*****ID:", id
+    print("\n*****ID:", id)
     cur.execute("SELECT url, top_url, headers FROM %s WHERE id = %d" % (use_table_name, id))
     for url, top_url, header in fetchiter(cur):
-        print "*****URL:", url
-        print "*****TOP_URL:", top_url
-        print "*****HEADER:", header
+        print("*****URL:", url)
+        print("*****TOP_URL:", top_url)
+        print("*****HEADER:", header)
         options = get_option_dict(url, top_url, header)
-        print "*****OPTIONS:", options
-        print creator.should_block_and_print(url, options)
+        print("*****OPTIONS:", options)
+        print(creator.should_block_and_print(url, options))

@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import re
 from FastHash import FastHash
 from RegexParser import Parser
@@ -79,32 +81,32 @@ class BlockListParser:
                     parser = regex_map[cur_sub]
                     if blacklisted:
                         if parser.is_whitelisted(url, options):
-                            print "Whitelisted by---------"
+                            print("Whitelisted by---------")
                             parser.print_rules()
                             return False
                     else:
                         state = parser.check(url, options)
                         if state == 1:
-                            print "Whitelisted by---------"
+                            print("Whitelisted by---------")
                             parser.print_rules()
                             return False
                         elif state == -1:
-                            print "Blacklisted by---------"
+                            print("Blacklisted by---------")
                             parser.print_rules()
                             blacklisted = True
         if blacklisted:
             if self.remaining_regex.is_whitelisted(url, options):
-                print "Whitelisted by---------"
+                print("Whitelisted by---------")
                 parser.print_rules()
                 return False
         else:
             state = self.remaining_regex.check(url, options)
             if state == 1:
-                print "Whitelisted by---------"
+                print("Whitelisted by---------")
                 parser.print_rules()
                 return False
             elif state == -1:
-                print "Blacklisted by---------"
+                print("Blacklisted by---------")
                 parser.print_rules()
                 blacklisted = True
         return blacklisted
@@ -202,17 +204,17 @@ class BlockListParser:
             else:
                 num_shortcuts[num] = 1
                 num_shortcuts_stored[num] = [shortcut]
-        print num_shortcuts
+        print(num_shortcuts)
 
     def _print_statistics_of_map(self, shortcut_size, total_rules, total_comments,
                                  total_shortcuts, total_secondary_lines, shortcut_url_map):
-        print "**********     Shortcut size is %d     **********" % shortcut_size
-        print "Number of rules = ", total_rules, ", comments = ", total_comments
-        print "Shortcuts found for ", total_shortcuts, " rules"
-        print "Shortcuts not found for ", total_secondary_lines, " rules"
-        print "Number map is"
+        print("**********     Shortcut size is %d     **********" % shortcut_size)
+        print("Number of rules = ", total_rules, ", comments = ", total_comments)
+        print("Shortcuts found for ", total_shortcuts, " rules")
+        print("Shortcuts not found for ", total_secondary_lines, " rules")
+        print("Number map is")
         self._print_num_map(shortcut_url_map)
-        print ""
+        print("")
 
     def _get_shortcut_url_map(self, pat, lines, shortcut_size):
         shortcut_url_map = {}
