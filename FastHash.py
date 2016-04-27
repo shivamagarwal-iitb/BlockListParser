@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 class FastHash:
     """A class to calculate fast hash for strings of a given constant length
     x_i = t_i*R^(M-1) + t_(i+1)*R^(M-2) + ... + t_(i+M-1)*R^0 (mod Q)"""

@@ -1,3 +1,4 @@
+from __future__ import print_function
 
 import re, pprint
 from RegexParser import SingleRuleParser as srp

@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 from RegexParser import SingleRuleParser
 
 options = {}
