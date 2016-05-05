@@ -29,10 +29,11 @@ def get_option_dict(url, top_url, content_type):
     image_types = ['tif', 'tiff', 'gif', 'jpeg', 'jpg', 'jif', 'jfif', 'jp2', 'jpx', 'j2k', 'j2c', 'fpx', 'pcd', 'png']
     script_types = ['js']
     # check if its an image
-    if "image/" in content_type:
-        options["image"] = True
-    if "javascript" in content_type:
-        options["script"] = True
+    if content_type is not None:
+        if "image/" in content_type:
+            options["image"] = True
+        if "javascript" in content_type:
+            options["script"] = True
 
     extension = urlparse(url).path.split('.')[-1]
     if not options["image"] and extension in image_types:
