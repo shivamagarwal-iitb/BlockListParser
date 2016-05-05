@@ -19,7 +19,7 @@ def fetchiter(cursor):
 psl = PublicSuffixList()
 
 # get options dict from url top_url and header of http response
-def get_option_dict(url, top_url, header_str):
+def get_option_dict(url, top_url, content_type):
     options = {}
     options["image"] = False
     options["script"] = False
@@ -29,13 +29,10 @@ def get_option_dict(url, top_url, header_str):
     image_types = ['tif', 'tiff', 'gif', 'jpeg', 'jpg', 'jif', 'jfif', 'jp2', 'jpx', 'j2k', 'j2c', 'fpx', 'pcd', 'png']
     script_types = ['js']
     # check if its an image
-    header = ODictCaseless()
-    header.load_state(eval(header_str))
-    for content_type in header['Content-Type']:
-        if "image/" in content_type:
-            options["image"] = True
-        if "javascript" in content_type:
-            options["script"] = True
+    if "image/" in content_type:
+        options["image"] = True
+    if "javascript" in content_type:
+        options["script"] = True
 
     extension = urlparse(url).path.split('.')[-1]
     if not options["image"] and extension in image_types:
@@ -76,11 +73,11 @@ id_list = ids.split()
 for id in id_list:
     id = int(id)
     print("\n*****ID:", id)
-    cur.execute("SELECT url, top_url, headers FROM %s WHERE id = %d" % (use_table_name, id))
-    for url, top_url, header in fetchiter(cur):
+    cur.execute("SELECT url, top_url, content_type FROM %s WHERE id = %d" % (use_table_name, id))
+    for url, top_url, content_type in fetchiter(cur):
         print("*****URL:", url)
         print("*****TOP_URL:", top_url)
-        print("*****HEADER:", header)
-        options = get_option_dict(url, top_url, header)
+        print("*****CONTENT_TYPE:", content_type)
+        options = get_option_dict(url, top_url, content_type)
         print("*****OPTIONS:", options)
         print(creator.should_block_and_print(url, options))
