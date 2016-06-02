@@ -6,7 +6,15 @@ In order to use it,
   blocklist_parser = new BlockListParser(regex_file) 
 
 or 
-  
-  blocklist_parser = new BlockListParser(regexes)
+
+'''  
+blocklist_parser = new BlockListParser(regexes)
+'''
 
 where regexes is comma separated list of regexes
+
+Then to detect if something should be blocked,
+
+blocklist_parser.should_block(ur, options)
+
+where 
